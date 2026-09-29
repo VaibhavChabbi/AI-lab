@@ -1,0 +1,73 @@
+import random
+def display_board(board):
+    print()
+    print(" " + board[0] + " | " + board[1] + " | " + board[2])
+    print("---+---+---")
+    print(" " + board[3] + " | " + board[4] + " | " + board[5])
+    print("---+---+---")
+    print(" " + board[6] + " | " + board[7] + " | " + board[8])
+    print()
+def check_winner(board, player):
+    winning_positions = [
+        (0, 1, 2),
+        (3, 4, 5),
+        (6, 7, 8),
+        (0, 3, 6),
+        (1, 4, 7),
+        (2, 5, 8),
+        (0, 4, 8),
+        (2, 4, 6)
+    ]
+    for a, b, c in winning_positions:
+        if board[a] == player and board[b] == player and board[c] == player:
+            return True
+    return False
+def board_full(board):
+    return " " not in board
+def computer_move(board):
+    available_positions = []
+    for i in range(9):
+        if board[i] == " ":
+            available_positions.append(i)
+    return random.choice(available_positions)
+def tic_tac_toe():
+    board = [" "] * 9
+    print("===== TIC TAC TOE =====")
+    print("You are X")
+    print("Computer is O")
+    print("\nBoard positions:(1-9)")  
+    while True:
+        display_board(board)
+        try:
+            position = int(input("Enter your position (1-9): "))
+        except ValueError:
+            print("Please enter a number!")
+            continue
+        if position < 1 or position > 9:
+            print("Please enter a number between 1 and 9.")
+            continue
+        position = position - 1
+        if board[position] != " ":
+            print("Position already occupied. Try again.")
+            continue
+        board[position] = "X"
+        if check_winner(board, "X"):
+            display_board(board)
+            print("Congratulations! You won!")
+            break
+        if board_full(board):
+            display_board(board)
+            print("It's a draw!")
+            break
+        computer_position = computer_move(board)
+        board[computer_position] = "O"
+        print("Computer chose position:", computer_position + 1)
+        if check_winner(board, "O"):
+            display_board(board)
+            print("Computer wins!")
+            break
+        if board_full(board):
+            display_board(board)
+            print("It's a draw!")
+            break
+tic_tac_toe()
